@@ -3,57 +3,60 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#11110e">
+    <meta name="theme-color" content="#110e10">
     <meta name="description" content="見つけてくれて、ありがとう。">
     <title>発見</title>
     <link rel="icon" href="./favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="./style.css">
+    <link rel="preload" href="./assets/girl.jpg" as="image">
     <script src="./script.js" defer></script>
   </head>
   <body>
-    <main class="scene" aria-labelledby="message">
-      <div class="rays" aria-hidden="true"></div>
-      <div class="grain" aria-hidden="true"></div>
-      <canvas id="confetti" aria-hidden="true"></canvas>
-
-      <header class="header">
-        <span class="edition">捜索記録 <span class="edition-divider">/</span> No. 06</span>
-        <button class="sound-button" id="sound" type="button" aria-pressed="false" aria-label="演出の音を出す" hidden>
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path class="sound-waves" d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/><path class="sound-mute" d="m16 9 5 6m0-6-5 6"/></svg>
+    <main class="film" id="film" aria-labelledby="message">
+      <div class="red-plane" aria-hidden="true"></div>
+      <svg class="architecture" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"><g fill="none"><path d="M0 0 510 475 1000 0M0 1000 510 475 1000 1000M0 230 510 475 1000 230M0 790 510 475 1000 790"/><path d="M115 120H890V900H115ZM215 215H800V810H215ZM310 295H710V710H310ZM390 365H630V610H390ZM450 420H570V540H450Z"/></g></svg>
+      <canvas id="effects" aria-hidden="true"></canvas>
+      <div class="vignette" aria-hidden="true"></div>
+      <div class="texture" aria-hidden="true"></div>
+      <div class="shots" aria-hidden="true">
+        <div class="shot threshold" data-scene="threshold"><div class="door"><span></span></div><img src="./assets/yukai.webp" width="732" height="488" alt="" fetchpriority="high"></div>
+        <div class="shot glyph first" data-scene="first"><span>発</span><i></i></div>
+        <div class="shot glyph second" data-scene="second"><span>見</span><i></i></div>
+        <div class="shot split" data-scene="split"><div><span>発</span></div><div><span>見</span></div></div>
+        <div class="shot encounter" data-scene="encounter"><div class="encounter-frame"></div><img src="./assets/girl.jpg" width="574" height="862" alt=""><p>みつけた。</p></div>
+        <div class="shot rush" data-scene="rush">
+          <div class="ribbon ribbon-one"><span>発見 発見 発見 発見</span></div>
+          <div class="ribbon ribbon-two"><span>発見 発見 発見 発見</span></div>
+          <div class="ribbon ribbon-three"><span>発見 発見 発見 発見</span></div>
+        </div>
+        <div class="shot charge" data-scene="charge"><div class="orbit"></div><div class="orbit orbit-two"></div><div class="red-thread"></div><span>発見</span></div>
+        <div class="shot impact" data-scene="impact">
+          <div class="impact-rays"></div><div class="shockwave"></div><div class="shockwave wave-two"></div>
+          <span class="echo echo-one">発見</span><span class="echo echo-two">発見</span>
+          <strong>発見</strong>
+          <div class="impact-rule"></div>
+        </div>
+      </div>
+      <section class="ending" id="ending">
+        <p class="end-label"><span>誘界</span><i></i>捜索終了</p>
+        <div class="end-composition">
+          <div class="end-frame" aria-hidden="true"></div>
+          <div class="end-title" aria-hidden="true"><span>発</span><span>見</span></div>
+          <img class="end-girl" src="./assets/girl.jpg" width="574" height="862" alt="白いワンピースと赤い靴の女の子">
+          <span class="end-caption" aria-hidden="true">みつけた。</span>
+        </div>
+        <h1 id="message"><span>見つけてくれて、</span><span>ありがとう。</span></h1>
+        <div class="end-mark" aria-hidden="true">完</div>
+      </section>
+      <div class="controls">
+        <button id="skip" class="quiet-button" type="button" hidden>スキップ <span aria-hidden="true">↗</span></button>
+        <button id="replay" class="quiet-button" type="button" hidden><span class="replay-icon" aria-hidden="true">↻</span> もう一回</button>
+        <button id="sound" class="quiet-button sound-button" type="button" aria-pressed="false" hidden>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m11 5-5 4H3v6h3l5 4V5Z"/><path class="sound-waves" d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/><path class="sound-mute" d="m16 9 5 6m0-6-5 6"/></svg>
           <span id="sound-label">音を出す</span>
         </button>
-      </header>
-
-      <section class="reveal">
-        <div class="eyebrow" aria-hidden="true"><span></span> MISSING PERSON <span></span></div>
-        <div class="headline-wrap">
-          <p class="headline" aria-hidden="true"><span>発</span><span>見</span><i>!</i></p>
-          <span class="headline-outline" aria-hidden="true">発見!</span>
-        </div>
-
-        <figure class="portrait-card">
-          <span class="card-corner top-left" aria-hidden="true"></span>
-          <span class="card-corner bottom-right" aria-hidden="true"></span>
-          <div class="portrait">
-            <img src="./docs/poster.jpg" width="1052" height="1494" alt="捜索ポスターに載っていた人物" fetchpriority="high">
-            <span class="portrait-sheen" aria-hidden="true"></span>
-          </div>
-          <figcaption><span>行方不明</span><b>捜索終了</b><span>No. 06</span></figcaption>
-          <div class="stamp" aria-hidden="true">発見済<span>FOUND</span></div>
-        </figure>
-
-        <div class="message-wrap">
-          <p class="small-message">あなたが、見つけた。</p>
-          <h1 id="message">見つけてくれて、<br>ありがとう。</h1>
-          <div class="finish-rule" aria-hidden="true"><span></span>完<span></span></div>
-        </div>
-      </section>
-
-      <footer class="footer">
-        <span class="footer-note">誘界 <span>/</span> 捜索終了</span>
-        <button class="replay" id="replay" type="button" hidden><span aria-hidden="true">↻</span> もう一回</button>
-      </footer>
+      </div>
+      <div class="timeline" aria-hidden="true"><span id="progress"></span></div>
     </main>
-    <noscript><p class="no-script">見つけてくれて、ありがとう。</p></noscript>
   </body>
 </html>
