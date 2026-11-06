@@ -2,6 +2,7 @@
   'use strict';
 
   const film = document.getElementById('film');
+  const ending = document.getElementById('ending');
   const canvas = document.getElementById('effects');
   const context = canvas.getContext('2d');
   const shots = [...document.querySelectorAll('[data-scene]')];
@@ -12,17 +13,16 @@
   const progress = document.getElementById('progress');
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const AudioClass = window.AudioContext || window.webkitAudioContext;
-  const duration = 10800;
+  const duration = 12100;
   const cuts = [
     { at: 0, name: 'threshold' },
     { at: 900, name: 'first' },
-    { at: 1550, name: 'second' },
-    { at: 2200, name: 'encounter' },
-    { at: 3400, name: 'split' },
-    { at: 4150, name: 'rush' },
-    { at: 5400, name: 'charge' },
-    { at: 6500, name: 'impact' },
-    { at: 8500, name: 'result' },
+    { at: 1900, name: 'second' },
+    { at: 3100, name: 'encounter' },
+    { at: 5100, name: 'passage' },
+    { at: 6800, name: 'charge' },
+    { at: 7900, name: 'impact' },
+    { at: 9900, name: 'result' },
   ];
   const colors = ['#a82c36', '#e8dccc', '#7d1d2a', '#f5f0e6', '#9bada4'];
   const voices = new Set();
@@ -70,9 +70,8 @@
     const cx = width * .5, cy = height * .46;
     const radius = Math.hypot(width, height) * .65;
     const charging = active === 'charge';
-    const rushing = active === 'rush';
     const settled = active === 'result';
-    const speed = charging ? -1.5 : rushing ? 3.8 : settled ? .12 : 1.5;
+    const speed = charging ? -.7 : settled ? .12 : .55;
     // Perspective streaks accelerate toward the viewer, then reverse into the burst.
     for (const mote of motes) {
       mote.distance += mote.speed * speed * step;
@@ -114,7 +113,7 @@
         for (let point = 0; point <= 45; point++) {
           const unit = point / 45;
           const angle = unit * Math.PI * 2.5 + strand * 1.2 + time * (charging ? 1.8 : .18);
-          const r = (charging ? Math.max(.04, 1 - (elapsed - 5400) / 1100) : .8) * Math.min(width, height) * (.2 + unit * .6);
+          const r = (charging ? Math.max(.04, 1 - (elapsed - 6800) / 1100) : .8) * Math.min(width, height) * (.2 + unit * .6);
           const x = cx + Math.cos(angle) * r;
           const y = cy + Math.sin(angle) * r * 1.45;
           if (!point) context.moveTo(x, y); else context.lineTo(x, y);
@@ -153,15 +152,14 @@
       tone(70, 0, .85, .045, 'sine', 45);
     } else if (name === 'encounter') {
       [659.25, 783.99].forEach((hz, i) => tone(hz, i * .16, .8, .025));
-    } else if (name === 'first' || name === 'second' || name === 'split') {
-      tone(name === 'second' ? 140 : 100, 0, .32, .15, 'sine', 35);
-      tone(name === 'second' ? 880 : 660, .02, .15, .035, 'triangle', 220);
-    } else if (name === 'rush') {
-      [220, 293.66, 440, 587.33, 880, 1174.66, 1760].forEach((hz, i) => tone(hz, i * .14, .14, .035, 'triangle'));
+    } else if (name === 'first' || name === 'second') {
+      tone(name === 'second' ? 293.66 : 220, 0, .8, .025, 'sine');
+    } else if (name === 'passage') {
+      [220, 293.66, 440].forEach((hz, i) => tone(hz, i * .3, .8, .02));
     } else if (name === 'charge') {
-      tone(180, 0, 1.03, .05, 'sine', 1700);
+      tone(180, 0, 1.03, .025, 'sine', 1700);
     } else if (name === 'impact') {
-      tone(130, 0, .65, .2, 'sine', 30);
+      tone(130, 0, .65, .06, 'sine', 30);
       [261.63, 329.63, 392, 523.25, 659.25, 783.99, 1046.5].forEach((hz, i) => tone(hz, i * .045, 1.5, .035, 'triangle'));
     } else if (name === 'result') {
       [523.25, 659.25, 783.99, 1046.5].forEach((hz, i) => tone(hz, i * .12, 1.3, .025));
@@ -174,10 +172,8 @@
     for (const shot of shots) shot.classList.toggle('active', shot.dataset.scene === name);
     film.classList.toggle('result', name === 'result');
     if (!withEffects) return;
-    if (name === 'first' || name === 'second') burst(24, .55);
-    if (name === 'split') burst(45, .8);
-    if (name === 'impact') burst(width < 700 ? 210 : 310, 1.35);
-    if (name === 'result') burst(55, .45);
+    if (name === 'impact') burst(width < 700 ? 45 : 70, .55);
+    if (name === 'result') burst(20, .25);
     cue(name);
   }
 
@@ -217,6 +213,7 @@
     resize();
     replay.hidden = true;
     skip.hidden = false;
+    ending.scrollTop = 0;
     film.classList.remove('finished', 'result');
     film.classList.add('running');
     for (const shot of shots) shot.classList.remove('active');
